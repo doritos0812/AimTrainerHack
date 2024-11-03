@@ -4,7 +4,6 @@
 POINT monitorArea = { 800, 500 };
 int width = 900, height = 600;
 
-
 void mouseClick() {
     INPUT inputs[2] = { 0 };
     inputs[0].type = INPUT_MOUSE;
@@ -64,8 +63,19 @@ void captureAndDetectColor() {
     ReleaseDC(NULL, hdcScreen);
 }
 
+bool checkForExitKey() {
+    if (GetAsyncKeyState(VK_ESCAPE)) {
+        return true;
+    }
+    return false;
+}
+
 int main() {
     while (1) {
+        if (checkForExitKey()) {
+            printf("Exiting...\n");
+            break;
+        }
         captureAndDetectColor();
         Sleep(100); // 주기적 탐지
     }
