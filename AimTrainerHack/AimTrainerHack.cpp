@@ -1,8 +1,8 @@
 ﻿#include <windows.h>
 #include <stdio.h>
 
-POINT monitorArea = { 800, 500 };
-int width = 900, height = 600;
+POINT topLeft, bottomRight, monitorArea;
+int width, height;
 
 void mouseClick() {
     INPUT inputs[2] = { 0 };
@@ -12,6 +12,42 @@ void mouseClick() {
     inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
     SendInput(2, inputs, sizeof(INPUT));
     printf("Mouse clicked at the detected position.\n");
+}
+
+void setMonitorArea() {
+    printf("스페이스바를 눌러 두 지점을 클릭하세요.\n");
+    while (!GetAsyncKeyState(VK_SPACE)) {
+        Sleep(100);
+    }
+
+    printf("첫 번째 클릭으로 좌상단 지점을 선택하세요.\n");
+    while (true) {
+        if (GetAsyncKeyState(VK_LBUTTON)) {
+            GetCursorPos(&topLeft);
+            monitorArea = topLeft;
+            printf("좌상단 지점 클릭: (%d, %d)\n", monitorArea.x, monitorArea.y);
+            break;
+        }
+        Sleep(100);
+    }
+
+    printf("두 번째 클릭으로 우하단 지점을 선택하세요.\n");
+    while (true) {
+        if (GetAsyncKeyState(VK_LBUTTON)) {
+            GetCursorPos(&bottomRight);
+            printf("우하단 지점 클릭: (%d, %d)\n", bottomRight.x, bottomRight.y);
+            break;
+        }
+        Sleep(100);
+    }
+
+    // 좌상단과 우하단 좌표로 영역 계산
+    width = bottomRight.x - topLeft.x;
+    height = bottomRight.y - topLeft.y;
+
+    printf("지정된 영역: 좌상단 (%d, %d), 우하단 (%d, %d), 너비: %d, 높이: %d\n",
+        monitorArea.x, monitorArea.y, bottomRight.x, bottomRight.y, width, height);
+    printf("모니터 영역이 성공적으로 설정되었습니다.\n");
 }
 
 
@@ -71,6 +107,7 @@ bool checkForExitKey() {
 }
 
 int main() {
+    setMonitorArea();
     while (1) {
         if (checkForExitKey()) {
             printf("Exiting...\n");
