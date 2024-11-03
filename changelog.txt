@@ -1,3 +1,14 @@
+AimTrainerHack (0.0.2) unstable; urgency=medium
+
+  * [chore] Set build platform as x64
+  * [feat] Add esc key to stop tracking
+  * [feat] Add setMonitorArea func to indicate detecting area
+  * [refactor] Set detecting color to exact RGB value
+  * [refactor] Refactor click checking condition more correctly
+  * [feat] Add setTargetColor func
+
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Sun, 03 Nov 2024 23:31:55 +0900
+
 AimTrainerHack (0.0.1) unstable; urgency=medium
 
   * initial commit
