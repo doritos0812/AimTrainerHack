@@ -23,6 +23,7 @@ void mouseClick() {
 }
 
 void setMonitorArea() {
+    bool wasPressed = false;
     printf("스페이스바를 눌러 두 지점을 클릭하세요.\n");
     while (!GetAsyncKeyState(VK_SPACE)) {
         Sleep(100);
@@ -30,23 +31,38 @@ void setMonitorArea() {
 
     printf("첫 번째 클릭으로 좌상단 지점을 선택하세요.\n");
     while (true) {
-        if (GetAsyncKeyState(VK_LBUTTON)) {
+        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+            if (!wasPressed) {
             GetCursorPos(&topLeft);
             monitorArea = topLeft;
             printf("좌상단 지점 클릭: (%d, %d)\n", monitorArea.x, monitorArea.y);
+                wasPressed = true;
+                Sleep(200);
             break;
+        }
+        }
+        else {
+            wasPressed = false;
         }
         Sleep(100);
     }
 
     printf("두 번째 클릭으로 우하단 지점을 선택하세요.\n");
     while (true) {
-        if (GetAsyncKeyState(VK_LBUTTON)) {
+        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+            if (!wasPressed) {
             GetCursorPos(&bottomRight);
             printf("우하단 지점 클릭: (%d, %d)\n", bottomRight.x, bottomRight.y);
+                wasPressed = true;
+                Sleep(200);
             break;
         }
+        }
+        else {
+            wasPressed = false;
+        }
         Sleep(100);
+        
     }
 
     // 좌상단과 우하단 좌표로 영역 계산
