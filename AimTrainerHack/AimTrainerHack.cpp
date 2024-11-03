@@ -1,5 +1,13 @@
 ﻿#include <windows.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+typedef struct {
+    BYTE red;
+    BYTE green;
+    BYTE blue;
+} RGBColor;
 
 POINT topLeft, bottomRight, monitorArea;
 int width, height;
@@ -51,7 +59,7 @@ void setMonitorArea() {
 }
 
 
-void captureAndDetectColor() {
+void captureAndDetectColor(RGBColor targetColor) {
     HDC hdcScreen = GetDC(NULL); // 화면의 DC 가져오기
     HDC hdcMem = CreateCompatibleDC(hdcScreen); // 메모리 DC 생성
     HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, width, height);
@@ -80,7 +88,7 @@ void captureAndDetectColor() {
             BYTE green = pPixels[index + 1];
             BYTE red = pPixels[index + 2];
 
-            if (red >= 230 && green >= 80 && green <= 90 && blue >= 30 && blue <= 40) {
+            if (red >= targetColor.red && green == targetColor.green && blue == targetColor.blue) {
                 printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
                 SetCursorPos(x + monitorArea.x, y + monitorArea.y);
                 mouseClick();
@@ -107,13 +115,16 @@ bool checkForExitKey() {
 }
 
 int main() {
+    RGBColor targetColor = { 255, 87, 34 };
+
     setMonitorArea();
+
     while (1) {
         if (checkForExitKey()) {
             printf("Exiting...\n");
             break;
         }
-        captureAndDetectColor();
+        captureAndDetectColor(targetColor);
         Sleep(100); // 주기적 탐지
     }
     return 0;
