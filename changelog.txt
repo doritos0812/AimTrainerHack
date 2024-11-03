@@ -1,0 +1,7 @@
+AimTrainerHack (0.0.1) unstable; urgency=medium
+
+  * initial commit
+  * Build basic Aim Tracking system through Bitmap reading.
+  * Set monitor location is hardcoded
+
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Sun, 03 Nov 2024 17:15:23 +0900
