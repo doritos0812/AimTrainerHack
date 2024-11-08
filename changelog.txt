@@ -1,3 +1,14 @@
+AimTrainerHack (0.1.0) unstable; urgency=medium
+
+  * [refactor] Modularize color detection, screen area, capture fulctionality
+  * [refactor] Change monitor area set trigger from click into F2 button
+  * [refactor] Change set target color trigger from click to F3
+  * [feat] Sleep 3 seconds before start detecting
+  * [refactor] Modularize isPixelColorCorrect function
+  * [feat] refactor set_monitor_area code and add F key to get fullscreen area
+
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Sat, 09 Nov 2024 02:06:21 +0900
+
 AimTrainerHack (0.0.2) unstable; urgency=medium
 
   * [chore] Set build platform as x64
@@ -7,7 +18,7 @@ AimTrainerHack (0.0.2) unstable; urgency=medium
   * [refactor] Refactor click checking condition more correctly
   * [feat] Add setTargetColor func
 
- -- Hyeongmin Kim <doritos2498@gmail.com>  Sun, 03 Nov 2024 23:31:55 +0900
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Sun, 07 Nov 2024 23:31:55 +0900
 
 AimTrainerHack (0.0.1) unstable; urgency=medium
 
