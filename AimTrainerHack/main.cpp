@@ -15,6 +15,10 @@ int main() {
     setMonitorArea();
     setTargetColor();
 
+    // 시작 버튼 누를 시간 제공
+    printf("Get Ready!! Starting in 3 sec...");
+    Sleep(3000);
+
     while (1) {
         if (checkForExitKey()) {
             printf("Exiting...\n");
