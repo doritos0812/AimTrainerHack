@@ -16,6 +16,18 @@ void mouseClick() {
     printf("Mouse clicked at the detected position.\n");
 }
 
+// 색상 비교 함수
+bool isPixelColorCorrect(int x, int y, int width, BYTE* pPixels, RGBColor color) {
+    // 전역으로 설정된 width 값을 사용
+    int index = (y * width + x) * 3;  // width 값 사용
+    BYTE blue = pPixels[index];
+    BYTE green = pPixels[index + 1];
+    BYTE red = pPixels[index + 2];
+
+    // 색상 비교
+    return (red == color.red && green == color.green && blue == color.blue);
+}
+
 // 화면 캡쳐 및 색상 감지 함수
 void captureAndDetectColor() {
     POINT monitorArea = getMonitorArea();
@@ -45,12 +57,7 @@ void captureAndDetectColor() {
     // 픽셀 데이터 검사
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            int index = (y * width + x) * 3;
-            BYTE blue = pPixels[index];
-            BYTE green = pPixels[index + 1];
-            BYTE red = pPixels[index + 2];
-
-            if (red == targetColor.red && green == targetColor.green && blue == targetColor.blue) {
+            if (isPixelColorCorrect(x, y, width, pPixels, targetColor)) {
                 printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
                 SetCursorPos(x + monitorArea.x, y + monitorArea.y);
                 mouseClick();
