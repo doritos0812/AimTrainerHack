@@ -3,23 +3,17 @@
 #include "set_monitor_area.h"
 
 static bool wasPressed = false;
-POINT topLeft, bottomRight, monitorArea;
+POINT topLeft, bottomRight;
 int width, height;
 
 // 사용자가 설정할 화면 영역 설정 함수
 void setMonitorArea() {
-    printf("스페이스바를 눌러 두 지점을 클릭하세요.\n");
-    while (!GetAsyncKeyState(VK_SPACE)) {
-        Sleep(100);
-    }
-
-    printf("첫 번째 클릭으로 좌상단 지점을 선택하세요.\n");
+    printf("첫 번째 F2 버튼으로 좌상단 지점을 선택하세요.\n");
     while (true) {
-        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+        if (GetAsyncKeyState(VK_F2) & 0x8000) {
             if (!wasPressed) {
                 GetCursorPos(&topLeft);
-                monitorArea = topLeft;
-                printf("좌상단 지점 클릭: (%d, %d)\n", monitorArea.x, monitorArea.y);
+                printf("좌상단 지점: (%d, %d)\n", topLeft.x, topLeft.y);
                 wasPressed = true;
                 Sleep(200);
                 break;
@@ -31,12 +25,12 @@ void setMonitorArea() {
         Sleep(100);
     }
 
-    printf("두 번째 클릭으로 우하단 지점을 선택하세요.\n");
+    printf("두 번째 F2 버튼으로 우하단 지점을 선택하세요.\n");
     while (true) {
-        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+        if (GetAsyncKeyState(VK_F2) & 0x8000) {
             if (!wasPressed) {
                 GetCursorPos(&bottomRight);
-                printf("우하단 지점 클릭: (%d, %d)\n", bottomRight.x, bottomRight.y);
+                printf("우하단 지점: (%d, %d)\n", bottomRight.x, bottomRight.y);
                 wasPressed = true;
                 Sleep(200);
                 break;
@@ -53,13 +47,13 @@ void setMonitorArea() {
     height = bottomRight.y - topLeft.y;
 
     printf("지정된 영역: 좌상단 (%d, %d), 우하단 (%d, %d), 너비: %d, 높이: %d\n",
-        monitorArea.x, monitorArea.y, bottomRight.x, bottomRight.y, width, height);
+        topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, width, height);
     printf("모니터 영역이 성공적으로 설정되었습니다.\n");
 }
 
-// 설정된 화면 영역 반환
+// 설정된 화면 좌상단 영역 반환
 POINT getMonitorArea() {
-    return monitorArea;
+    return topLeft;
 }
 
 // 설정된 영역의 너비 반환
