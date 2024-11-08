@@ -19,10 +19,10 @@ RGBColor getColorAtCursor(POINT pt) {
 
 // 사용자 클릭을 통해 탐지할 색상을 설정하는 함수
 void setTargetColor() {
-    printf("탐지할 색상을 설정하려면 원하는 위치를 클릭하세요...\n");
+    printf("탐지할 색상을 설정하려면 원하는 위치에 커서를 두고 F3를 클릭하세요...\n");
 
     while (1) {
-        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {  // 마우스 왼쪽 버튼이 눌림 상태일 때
+        if (GetAsyncKeyState(VK_F3) & 0x8000) {  // 마우스 왼쪽 버튼이 눌림 상태일 때
             if (!wasPressed) {
                 POINT pt;
                 GetCursorPos(&pt);
