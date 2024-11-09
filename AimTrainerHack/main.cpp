@@ -12,6 +12,7 @@ bool checkForExitKey() {
 }
 
 int main() {
+    isFpsModeCheck();
     setMonitorArea();
     setTargetColor();
 

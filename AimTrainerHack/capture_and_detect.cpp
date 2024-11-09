@@ -33,7 +33,9 @@ void captureAndDetectColor() {
     POINT monitorArea = getMonitorArea();
     int width = getMonitorWidth();
     int height = getMonitorHeight();
+    bool isFpsMode = getFpsMode();
     RGBColor targetColor = getTargetColor();
+    RGBColor testColor = { 255, 255, 0 };
 
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
@@ -59,7 +61,19 @@ void captureAndDetectColor() {
         for (int x = 0; x < width; x++) {
             if (isPixelColorCorrect(x, y, width, pPixels, targetColor)) {
                 printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
-                SetCursorPos(x + monitorArea.x, y + monitorArea.y);
+                if (isFpsMode) {
+                    int dx, dy;
+                    POINT center;
+                    setMonitorCenter();
+                    center = getMonitorCenter();
+                    dx = x - center.x;
+                    dy = y - center.y;
+                    printf("dx = %d, dy = %d, center = ( %d, %d )", dx, dy, center.x, center.y);
+                    mouse_event(MOUSEEVENTF_MOVE, dx, dy, 0, 0);
+                }
+                else {
+                    SetCursorPos(x + monitorArea.x, y + monitorArea.y);
+                }
                 mouseClick();
                 free(pPixels);
                 DeleteObject(hBitmap);
