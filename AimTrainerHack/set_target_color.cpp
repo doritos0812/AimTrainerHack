@@ -18,14 +18,19 @@ RGBColor getColorAtCursor(POINT pt) {
 }
 
 // 사용자 클릭을 통해 탐지할 색상을 설정하는 함수
-void setTargetColor() {
+void setTargetColor(bool isFpsMode, POINT center) {
     printf("탐지할 색상을 설정하려면 원하는 위치에 커서를 두고 F3를 클릭하세요...\n");
 
     while (1) {
         if (GetAsyncKeyState(VK_F3) & 0x8000) {  // 마우스 왼쪽 버튼이 눌림 상태일 때
             if (!wasPressed) {
                 POINT pt;
-                GetCursorPos(&pt);
+                if (isFpsMode) {
+                    pt = center;
+                }
+                else {
+                    GetCursorPos(&pt);
+                }
                 targetColor = getColorAtCursor(pt); // 클릭 지점의 색상 설정
                 printf("탐지할 색상 RGB: (%d, %d, %d)\n", targetColor.red, targetColor.green, targetColor.blue);
                 wasPressed = true; // 눌린 상태로 설정

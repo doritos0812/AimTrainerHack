@@ -10,7 +10,7 @@ typedef struct {
 } RGBColor;
 
 // 사용자 클릭을 통해 탐지할 색상을 설정하는 함수
-void setTargetColor();
+void setTargetColor(bool isFpsMode, POINT center);
 
 // 설정된 색상 반환
 RGBColor getTargetColor();
