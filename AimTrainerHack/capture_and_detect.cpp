@@ -5,6 +5,25 @@
 #include "set_target_color.h"
 #include "set_monitor_area.h"
 
+// 전역 변수들로 선언하여 최초에만 초기화
+static POINT monitorArea;
+static int width;
+static int height;
+static bool isFpsMode;
+static RGBColor targetColor;
+static POINT center;
+
+// 최초 한 번만 호출될 초기화 함수
+void initializeCaptureAndDetect() {
+    monitorArea = getMonitorArea();
+    width = getMonitorWidth();
+    height = getMonitorHeight();
+    isFpsMode = getFpsMode();
+    targetColor = getTargetColor();
+    setMonitorCenter();
+    center = getMonitorCenter();
+}
+
 // mouse 클릭
 void mouseClick() {
     INPUT inputs[2] = { 0 };
@@ -28,15 +47,24 @@ bool isPixelColorCorrect(int x, int y, int width, BYTE* pPixels, RGBColor color)
     return (red == color.red && green == color.green && blue == color.blue);
 }
 
+// 감지 후 작업 수행 함수
+void performActionOnDetection(int x, int y) {
+    printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
+
+    if (isFpsMode) {
+        int dx = x - center.x;
+        int dy = y - center.y;
+        printf("dx = %d, dy = %d, center = (%d, %d)\n", dx, dy, center.x, center.y);
+        mouse_event(MOUSEEVENTF_MOVE, dx, dy, 0, 0);
+    }
+    else {
+        SetCursorPos(x + monitorArea.x, y + monitorArea.y);
+    }
+    mouseClick();
+}
+
 // 화면 캡쳐 및 색상 감지 함수
 void captureAndDetectColor() {
-    POINT monitorArea = getMonitorArea();
-    int width = getMonitorWidth();
-    int height = getMonitorHeight();
-    bool isFpsMode = getFpsMode();
-    RGBColor targetColor = getTargetColor();
-    RGBColor testColor = { 255, 255, 0 };
-
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
     HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, width, height);
@@ -59,28 +87,16 @@ void captureAndDetectColor() {
     // 픽셀 데이터 검사
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            if (isPixelColorCorrect(x, y, width, pPixels, targetColor)) {
-                printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
-                if (isFpsMode) {
-                    int dx, dy;
-                    POINT center;
-                    setMonitorCenter();
-                    center = getMonitorCenter();
-                    dx = x - center.x;
-                    dy = y - center.y;
-                    printf("dx = %d, dy = %d, center = ( %d, %d )", dx, dy, center.x, center.y);
-                    mouse_event(MOUSEEVENTF_MOVE, dx, dy, 0, 0);
-                }
-                else {
-                    SetCursorPos(x + monitorArea.x, y + monitorArea.y);
-                }
-                mouseClick();
-                free(pPixels);
-                DeleteObject(hBitmap);
-                DeleteDC(hdcMem);
-                ReleaseDC(NULL, hdcScreen);
-                return;
-            }
+            if (!isPixelColorCorrect(x, y, width, pPixels, targetColor)) continue;
+
+            performActionOnDetection(x, y);
+
+            // 메모리 정리 후 종료
+            free(pPixels);
+            DeleteObject(hBitmap);
+            DeleteDC(hdcMem);
+            ReleaseDC(NULL, hdcScreen);
+            return;
         }
     }
 
