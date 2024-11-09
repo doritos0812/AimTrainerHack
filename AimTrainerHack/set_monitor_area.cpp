@@ -1,17 +1,26 @@
 #include <windows.h>
 #include <stdio.h>
+#include <iostream>
+#include <cctype>
 #include "set_monitor_area.h"
 
 // 전역 변수 초기화
 int width = 0, height = 0;
-POINT topLeft = { 0, 0 }, bottomRight = { 0, 0 };
+POINT topLeft = { 0, 0 }, bottomRight = { 0, 0 }, center = { 0, 0 };
 bool wasPressed = false;
+bool isFpsMode = false;
 
 // 전체 화면 해상도 반환 함수
 void getFullScreenResolution(int* width, int* height) {
     *width = GetSystemMetrics(SM_CXSCREEN);  // 화면 가로 해상도
     *height = GetSystemMetrics(SM_CYSCREEN); // 화면 세로 해상도
     printf("전체화면 해상도: %d x %d\n", *width, *height);
+}
+
+void setMonitorCenter() {
+    int monitorWidth, monitorHeight;
+    getFullScreenResolution(&monitorWidth, &monitorHeight);
+    center = { monitorWidth / 2, monitorHeight / 2 };
 }
 
 // 버튼을 기다리고 눌린 상태에 따라 동작을 처리하는 함수
@@ -27,6 +36,23 @@ bool waitForKeyPress(int key, bool* wasPressed, void (*action)()) {
         *wasPressed = false;
     }
     return false;
+}
+
+void isFpsModeCheck() {
+    printf("FPS mode 여부를 입력해주세요. (y/n) : ");
+    char fpsModeInput;
+    std::cin >> fpsModeInput;
+
+    if (tolower(fpsModeInput) == 'y') {
+        isFpsMode = true;
+    }
+    else if (tolower(fpsModeInput) == 'n') {
+        isFpsMode = false;
+    }
+    else {
+        printf("잘못 된 입력값 입니다...\n");
+        isFpsModeCheck();
+    }
 }
 
 // F2 버튼을 눌러서 좌상단과 우하단 좌표를 선택하는 함수
@@ -92,4 +118,12 @@ int getMonitorWidth() {
 // 설정된 영역의 높이 반환
 int getMonitorHeight() {
     return height;
+}
+
+bool getFpsMode() {
+    return isFpsMode;
+}
+
+POINT getMonitorCenter() {
+    return center;
 }

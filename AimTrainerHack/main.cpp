@@ -12,8 +12,11 @@ bool checkForExitKey() {
 }
 
 int main() {
+    isFpsModeCheck();
     setMonitorArea();
-    setTargetColor();
+    setMonitorCenter();
+    setTargetColor(getFpsMode(), getMonitorCenter());
+    initializeCaptureAndDetect();
 
     // 시작 버튼 누를 시간 제공
     printf("Get Ready!! Starting in 3 sec...");
@@ -25,7 +28,7 @@ int main() {
             break;
         }
         captureAndDetectColor();
-        Sleep(100); // 주기적 탐지
+        Sleep(30); // 주기적 탐지
     }
     return 0;
 }

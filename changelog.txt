@@ -1,3 +1,11 @@
+AimTrainerHack (0.2.0) unstable; urgency=medium
+
+  * [feat] Add fps mode
+  * [refactor] Refactor capture_and_detect
+  * [feat] Set cursor position to center in FpsMode
+
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Sat, 09 Nov 2024 21:16:40 +0900
+
 AimTrainerHack (0.1.0) unstable; urgency=medium
 
   * [refactor] Modularize color detection, screen area, capture fulctionality
