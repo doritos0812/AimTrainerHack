@@ -79,7 +79,37 @@ void performActionOnDetection(int x, int y) {
         printf("Reached final position: (%d, %d)\n", x, y);
     }
     else {
-        SetCursorPos(x + monitorArea.x, y + monitorArea.y);
+        POINT currentPos;
+        GetCursorPos(&currentPos);
+
+        // 초기 위치
+        int currentX = currentPos.x;
+        int currentY = currentPos.y;
+
+        // 타겟 위치
+        int targetX = x + monitorArea.x;
+        int targetY = y + monitorArea.y;
+
+        // 임계값 설정 (프레임당 최대 이동량)
+        const int MAX_DELTA = 25;
+
+        // 반복적으로 이동하여 목표 지점에 도달
+        while (currentX != targetX || currentY != targetY) {
+            int dx = targetX - currentX;
+            int dy = targetY - currentY;
+
+            // dx, dy를 임계값 내로 제한
+            if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
+            if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+
+            SetCursorPos(currentX + dx, currentY + dy);
+
+            // 현재 위치 갱신
+            currentX += dx;
+            currentY += dy;
+
+            Sleep(5);
+        }
     }
 
     // 최종 위치에서 클릭 수행
