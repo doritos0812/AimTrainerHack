@@ -1,3 +1,10 @@
+AimTrainerHack (0.2.1) unstable; urgency=medium
+
+  * [feat] Add smoothMouseMoving in FPS mode
+  * [feat] Add smoothMouseMoving in non-FPS mode
+
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Fri, 15 Nov 2024 20:27:51 +0900
+
 AimTrainerHack (0.2.0) unstable; urgency=medium
 
   * [feat] Add fps mode
