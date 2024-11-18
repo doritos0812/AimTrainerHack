@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "capture_and_detect.h"
 #include "set_target_color.h"
 #include "set_monitor_area.h"
@@ -50,22 +51,34 @@ bool isPixelColorCorrect(int x, int y, int width, BYTE* pPixels, RGBColor color)
 void performActionOnDetection(int x, int y) {
     printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
 
+    // 임계값 설정 (프레임당 최대 이동량)
+    const int MAX_DELTA = 25;
+
+    // 랜덤 값 초기화
+    srand((unsigned int)time(NULL));
+
     if (isFpsMode) {
         // 초기 위치
         int currentX = center.x;
         int currentY = center.y;
-
-        // 임계값 설정 (프레임당 최대 이동량)
-        const int MAX_DELTA = 25;
 
         // 반복적으로 이동하여 목표 지점에 도달
         while (currentX != x || currentY != y) {
             int dx = x - currentX;
             int dy = y - currentY;
 
-            // dx, dy를 임계값 내로 제한
-            if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
-            if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+            // dx, dy를 임계값 내로 제한하고 랜덤성 부여
+            if (abs(dx) > MAX_DELTA || abs(dy) > MAX_DELTA) {
+                // dx와 dy에 랜덤값 추가
+                int randomOffsetX = (rand() % 7) - 3; // -3 ~ 3
+                int randomOffsetY = (rand() % 7) - 3; // -3 ~ 3
+
+                if (abs(dx) > MAX_DELTA) dx = ((dx > 0) ? MAX_DELTA : -MAX_DELTA);
+                if (abs(dy) > MAX_DELTA) dy = ((dy > 0) ? MAX_DELTA : -MAX_DELTA);
+
+                dx += randomOffsetX;
+                dy += randomOffsetY;
+            }
 
             mouse_event(MOUSEEVENTF_MOVE, dx, dy, 0, 0);
 
@@ -75,8 +88,6 @@ void performActionOnDetection(int x, int y) {
 
             Sleep(5);
         }
-
-        printf("Reached final position: (%d, %d)\n", x, y);
     }
     else {
         POINT currentPos;
@@ -90,17 +101,24 @@ void performActionOnDetection(int x, int y) {
         int targetX = x + monitorArea.x;
         int targetY = y + monitorArea.y;
 
-        // 임계값 설정 (프레임당 최대 이동량)
-        const int MAX_DELTA = 25;
-
         // 반복적으로 이동하여 목표 지점에 도달
         while (currentX != targetX || currentY != targetY) {
             int dx = targetX - currentX;
             int dy = targetY - currentY;
 
-            // dx, dy를 임계값 내로 제한
-            if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
-            if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+            // dx, dy를 임계값 내로 제한하고 랜덤성 부여
+            if (abs(dx) > MAX_DELTA || abs(dy) > MAX_DELTA) {
+                // dx와 dy에 랜덤값 추가
+                int randomOffsetX = (rand() % 7) - 3; // -3 ~ 3
+                int randomOffsetY = (rand() % 7) - 3; // -3 ~ 3
+
+                // dx, dy를 임계값 내로 제한
+                if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
+                if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+            
+                dx += randomOffsetX;
+                dy += randomOffsetY;
+            }
 
             SetCursorPos(currentX + dx, currentY + dy);
 
@@ -111,7 +129,6 @@ void performActionOnDetection(int x, int y) {
             Sleep(5);
         }
     }
-
     // 최종 위치에서 클릭 수행
     mouseClick();
 }

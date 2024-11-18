@@ -1,3 +1,10 @@
+AimTrainerHack (0.2.2) unstable; urgency=medium
+
+  * [feat] Add random vibrations in cursor movement
+  * [refactor] refactor miscellaneous
+
+ -- Hyeongmin Kim <doritos2498@gmail.com>  Mon, 18 Nov 2024 16:19:22 +0900
+
 AimTrainerHack (0.2.1) unstable; urgency=medium
 
   * [feat] Add smoothMouseMoving in FPS mode
