@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "capture_and_detect.h"
 #include "set_target_color.h"
 #include "set_monitor_area.h"
@@ -58,14 +59,26 @@ void performActionOnDetection(int x, int y) {
         // 임계값 설정 (프레임당 최대 이동량)
         const int MAX_DELTA = 25;
 
+        // 랜덤 값 초기화
+        srand((unsigned int)time(NULL));
+
         // 반복적으로 이동하여 목표 지점에 도달
         while (currentX != x || currentY != y) {
             int dx = x - currentX;
             int dy = y - currentY;
 
-            // dx, dy를 임계값 내로 제한
-            if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
-            if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+            // dx, dy를 임계값 내로 제한하고 랜덤성 부여
+            if (abs(dx) > MAX_DELTA || abs(dy) > MAX_DELTA) {
+                // dx와 dy에 랜덤값 추가
+                int randomOffsetX = (rand() % 7) - 3; // -3 ~ 3
+                int randomOffsetY = (rand() % 7) - 3; // -3 ~ 3
+
+                if (abs(dx) > MAX_DELTA) dx = ((dx > 0) ? MAX_DELTA : -MAX_DELTA);
+                if (abs(dy) > MAX_DELTA) dy = ((dy > 0) ? MAX_DELTA : -MAX_DELTA);
+
+                dx += randomOffsetX;
+                dy += randomOffsetY;
+            }
 
             mouse_event(MOUSEEVENTF_MOVE, dx, dy, 0, 0);
 
@@ -93,14 +106,27 @@ void performActionOnDetection(int x, int y) {
         // 임계값 설정 (프레임당 최대 이동량)
         const int MAX_DELTA = 25;
 
+        // 랜덤 값 초기화
+        srand((unsigned int)time(NULL));
+
         // 반복적으로 이동하여 목표 지점에 도달
         while (currentX != targetX || currentY != targetY) {
             int dx = targetX - currentX;
             int dy = targetY - currentY;
 
-            // dx, dy를 임계값 내로 제한
-            if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
-            if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+            // dx, dy를 임계값 내로 제한하고 랜덤성 부여
+            if (abs(dx) > MAX_DELTA || abs(dy) > MAX_DELTA) {
+                // dx와 dy에 랜덤값 추가
+                int randomOffsetX = (rand() % 7) - 3; // -3 ~ 3
+                int randomOffsetY = (rand() % 7) - 3; // -3 ~ 3
+
+                // dx, dy를 임계값 내로 제한
+                if (abs(dx) > MAX_DELTA) dx = (dx > 0) ? MAX_DELTA : -MAX_DELTA;
+                if (abs(dy) > MAX_DELTA) dy = (dy > 0) ? MAX_DELTA : -MAX_DELTA;
+            
+                dx += randomOffsetX;
+                dy += randomOffsetY;
+            }
 
             SetCursorPos(currentX + dx, currentY + dy);
 
