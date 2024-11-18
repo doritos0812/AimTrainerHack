@@ -51,16 +51,16 @@ bool isPixelColorCorrect(int x, int y, int width, BYTE* pPixels, RGBColor color)
 void performActionOnDetection(int x, int y) {
     printf("Detected target color at (%d, %d)\n", x + monitorArea.x, y + monitorArea.y);
 
+    // 임계값 설정 (프레임당 최대 이동량)
+    const int MAX_DELTA = 25;
+
+    // 랜덤 값 초기화
+    srand((unsigned int)time(NULL));
+
     if (isFpsMode) {
         // 초기 위치
         int currentX = center.x;
         int currentY = center.y;
-
-        // 임계값 설정 (프레임당 최대 이동량)
-        const int MAX_DELTA = 25;
-
-        // 랜덤 값 초기화
-        srand((unsigned int)time(NULL));
 
         // 반복적으로 이동하여 목표 지점에 도달
         while (currentX != x || currentY != y) {
@@ -88,8 +88,6 @@ void performActionOnDetection(int x, int y) {
 
             Sleep(5);
         }
-
-        printf("Reached final position: (%d, %d)\n", x, y);
     }
     else {
         POINT currentPos;
@@ -102,12 +100,6 @@ void performActionOnDetection(int x, int y) {
         // 타겟 위치
         int targetX = x + monitorArea.x;
         int targetY = y + monitorArea.y;
-
-        // 임계값 설정 (프레임당 최대 이동량)
-        const int MAX_DELTA = 25;
-
-        // 랜덤 값 초기화
-        srand((unsigned int)time(NULL));
 
         // 반복적으로 이동하여 목표 지점에 도달
         while (currentX != targetX || currentY != targetY) {
@@ -137,7 +129,6 @@ void performActionOnDetection(int x, int y) {
             Sleep(5);
         }
     }
-
     // 최종 위치에서 클릭 수행
     mouseClick();
 }
