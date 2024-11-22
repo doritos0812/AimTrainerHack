@@ -53,3 +53,7 @@ https://github.com/doritos0812/AimbotShield/releases/tag/0.1.1
 * AimbotShield가 마우스 이동의 직선성과 일정한 거리의 움직임을 바탕으로 핵을 감지한다는 정보를 입수
 * 이에 대응하기 위해서 타겟을 감지하고 이동하는 과정에서 랜덤값(-3 ~ 3)을 추가하여 직선성과 일정거리를 이동하는 것을 막음
 * 이 동작을 통해 AimbotShield의 핵 감지 로직을 회피 가능
+
+## 24.11.22
+관련 내용 Notion 문서 링크 첨부
+- https://www.notion.so/AimTrainerHack-Aimbot-Program-13ab2d181803802a8aebcfb2f46f85b4
